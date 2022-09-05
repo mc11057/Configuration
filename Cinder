@@ -1,0 +1,1 @@
+echo 'include /var/lib/cinder/volumes/*' >> /etc/tgt/conf.d/cinder.conf

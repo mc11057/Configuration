@@ -1,0 +1,95 @@
+     URL: https://ceph-admin:8443/
+	    User: admin
+	Password: 7po381w07o
+	vm110576977
+	
+	
+	
+	sudo /usr/bin/cephadm shell --fsid cbfce036-e407-11ec-992c-5529d5988f22 -c /etc/ceph/ceph.conf -k /etc/ceph/ceph.client.admin.keyring
+	
+	
+	
+	
+	for i in ceph-1 ceph-2 ceph-3; do sudo ssh-copy-id -f -i
+/etc/ceph/ceph.pub root@$i; done
+
+
+
+Mount client
+
+install basic packages for ceph client: sudo apt install ceph-common
+Create a path to put ceph client configuration: mkdir -p -m 755 /etc/ceph
+get minimal conf from ceph-admin: ssh root@192.168.122.2 "sudo ceph config generate-minimal-conf" | sudo tee /etc/ceph/ceph.conf
+give permisson for new file configuration: chmod 644 /etc/ceph/ceph.conf
+get authorization secret for user cfs from ceph-admin: ssh root@192.168.122.2 "sudo ceph fs authorize gv0 client.cfs / rw" | sudo tee /etc/ceph/ceph.client.cfs.keyring
+give permisson for new user file: chmod 600 /etc/ceph/ceph.client.cfs.keyring
+create a path to mount cephs: mkdir /mnt/mycephfs
+mount ceph: mount -t ceph 192.168.5.2:6789,192.168.5.3:6789,192.168.5.4:6789,192.168.5.5:6789,192.168.5.6:6789:/ /mnt/mycephfs -o name=cfs,mds_namespace=gv0
+
+unmount:
+umount /mnt/mycephfs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Asumiendo que se terminaron los pasos de la guía de ceph y tomando en cuenta los ultimos dos puntos en el nodo ceph admin:
+
+Crear el volumen con nombre: gv0
+
+ceph fs volume create gv0
+Crear la llave de acceso para leer y escribir en el volumen recien creado gv0 al usuario cfs:
+
+ceph fs authorize gv0 client.cfs /rw > /etc/ceph/ceph.client.cfs.keyring
+Montaje del volumen en otros nodos (enfoque Kernel driver):
+
+Instalar paqueteria básica:
+
+sudo apt install ceph-common
+Considerar para los siguientes comando que la IP del nodo ceph admin es: 192.168.122.2, además se requiere habilitar accesso al usuario root mediante ssh para obtener archivos de configuracion y archivo de autorización recien creado .
+
+Crear carpeta donde se almacenara la configuración de ceph y dar permisos al directorio creado:
+
+mkdir -p -m 755 /etc/ceph
+Obtener la configuración minima de ceph-admin y guardarla en carpeta recien creada:
+
+ssh root@192.168.122.2 "sudo ceph config generate-minimal-conf" | sudo tee /etc/ceph/ceph.conf
+Dar permisos y ownership al archivo importado:
+
+ chmod 644 /etc/ceph/ceph.conf
+Obtener archivo de autorización para el usuario cfs: 
+
+ssh root@192.168.122.2 "sudo ceph fs authorize gv0 client.cfs / rw" | sudo tee /etc/ceph/ceph.client.cfs.keyring
+Dar permisos al archivo recien importado:
+
+chmod 600 /etc/ceph/ceph.client.cfs.keyring
+Crear directorio donde se montará el volumen (aqui poner la ruta donde se instalara wordpress por ejemplo en vez de /mnt/mycephs podrìa ser /var/ww/html/wpress)
+
+cephs: mkdir /mnt/mycephfs
+Montar volumen en carpeta recien creada /mnt/mycephs (las direcciones ips corresponden a los nodos de ceph-admin):
+
+mount -t ceph 192.168.5.2:6789,192.168.5.3:6789,192.168.5.4:6789,192.168.5.5:6789,192.168.5.6:6789:/ /mnt/mycephfs -o name=cfs,mds_namespace=gv0
+Si por alguna razón se desea desmontar el volumen:
+
+
+umount /mnt/mycephfs
+

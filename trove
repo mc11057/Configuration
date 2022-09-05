@@ -1,0 +1,31 @@
+openstack database instance create MariaDB-103 \
+--flavor 0 \
+--size 10 \
+--nic net-id=9f39959f-2f70-400c-aa80-5de54e92cf27 \
+--databases MyDB --users serverworld:password \
+--datastore mariadb --datastore-version 10.3 \
+--is-public \
+--allowed-cidr 10.0.0.0/24 \
+--allowed-cidr 192.168.100.0/24 
++-------------------------+-----
+
+
+su -s /bin/sh -c "trove-manage datastore_version_update mariadb 10.3 mariadb cb2ba682-a7a2-4f4e-8320-91ceb8d2d0e5 mariadb 1" trove
+
+openstack database instance create MariaDB-103 --flavor 1530eaa9-f2c2-4b88-8ee0-58b249d1165d --size 5 --nic net-id=5eae0114-e758-4039-bc02-15a5c98d596d --databases MyDB --users ubuntu:icc115 --datastore mariadb --datastore-version 10.3 --is-public --allowed-cidr 10.0.0.0/24 --allowed-cidr 192.168.122.0/24 
+
+
+su -s /bin/sh -c "trove-manage datastore_version_update mariadb 10.2 mariadb ea8e9ab6-c772-49d0-9422-7cbcc119de37  mariadb 1" trove
+
+su -s /bin/sh -c "trove-manage datastore_version_update mariadb 10.3 mariadb ea8e9ab6-c772-49d0-9422-7cbcc119de37 mariadb 1" trove
+
+
+openstack database instance create MariaDB-103 \
+--flavor 0 \
+--size 10 \
+--nic net-id=9f39959f-2f70-400c-aa80-5de54e92cf27 \
+--databases MyDB --users serverworld:password \
+--datastore mariadb --datastore-version 10.3 \
+--is-public \
+--allowed-cidr 10.0.0.0/24 \
+--allowed-cidr 192.168.100.0/24 

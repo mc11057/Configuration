@@ -1,0 +1,97 @@
+sudo apt update && sudo apt upgrade
+network:
+    ethernets:
+        enp1s0:
+            dhcp4: false
+            addresses: [192.168.122.5/24]
+            gateway4: 192.168.122.1
+            nameservers:
+                addresses: [8.8.8.8]
+        enp6s0:
+            addresses: [192.168.3.5/24]
+    version: 2
+    
+
+192.168.5.60 ceph-admin
+192.168.5.61 ceph-mon
+192.168.5.62 ceph-osd1
+192.168.5.63 ceph-osd2
+192.168.5.64 ceph-osd3
+
+192.168.122.3 vm2
+192.168.3.3 vm2
+192.168.122.4 vm3
+192.168.3.4 vm3
+192.168.122.5 vm4
+192.168.3.5 vm4
+
+
+
+[mysqld]
+query_cache_size=0
+binlog_format=ROW
+default-storage-engine=innodb
+innodb_autoinc_lock_mode=2
+query_cache_type=0
+bind-address=0.0.0.0
+# Galera Provider Configuration
+wsrep_on=ON
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+#wsrep_provider_options="gcache.size=32G"
+# Galera Cluster Configuration
+wsrep_cluster_name="ClusterMaria"
+wsrep_cluster_address="gcomm://192.168.3.3,192.168.3.4,192.168.3.5"
+[DM] - [3]# Galera Synchronization Congifuration
+wsrep_sst_method=rsync
+#wsrep_sst_auth=user:pass
+# Galera Node Configuration
+wsrep_node_address="192.168.3.3"
+wsrep_node_name="vm2"
+
+
+# Automatically generated for Debian scripts. DO NOT TOUCH!
+[client]
+host
+= localhost
+user
+= debian-sys-maint
+password = 5yLH20C6FUUZStUv
+socket
+= /var/run/mysqld/mysqld.sock
+[mysql_upgrade]
+host
+= localhost
+user
+= debian-sys-maint
+[DM] - [4]password = 5yLH20C6FUUZStUv
+socket
+= /var/run/mysqld/mysqld.sock
+basedir = /usr
+
+
+nano /var/lib/mysql/grastate.dat
+
+
+# GALERA saved state
+version: 2.1
+uuid:    2ebc974d-ccd4-11ec-a711-daebef380cc5
+seqno:   -1
+safe_to_bootstrap: 1
+
+
+
+CREATE USER 'maxscale'@'maxscalehost' IDENTIFIED BY 'maxscale-password';
+GRANT SELECT ON mysql.user TO 'maxscale'@'maxscalehost';
+GRANT SELECT ON mysql.db TO 'maxscale'@'maxscalehost';
+GRANT SELECT ON mysql.tables_priv TO 'maxscale'@'maxscalehost';
+GRANT SELECT ON mysql.columns_priv TO 'maxscale'@'%';
+GRANT SELECT ON mysql.procs_priv TO 'maxscale'@'%';
+GRANT SELECT ON mysql.proxies_priv TO 'maxscale'@'%';
+GRANT SELECT ON mysql.roles_mapping TO 'maxscale'@'%';
+GRANT SHOW DATABASES ON *.* TO 'maxscale'@'%';
+
+GRANT SELECT ON mysql.roles_mapping TO 'maxscale'@'%';
+
+
+
+

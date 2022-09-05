@@ -1,0 +1,1 @@
+ssh -i instances.pem ubuntu@192.168.122.83

@@ -1,0 +1,30 @@
+[global]
+        fsid = 0412a7e4-1293-11ed-b05a-0bc91d011938
+        mon_host = [v2:192.168.5.60:3300/0,v1:192.168.5.60:6789/0] [v2:192.168.5.61:3300/0,v1:192.168.5.61:6789/0] [v2:192.168.5.62:3300/0,v1:192.168.5.62:6789/0] [v2:192.168.5.63:3300/0,v1:192.168.5.63:6789/0]>
+[client.radosgw.gateway]
+host = ceph-admin
+keyring = /etc/ceph/keyring.radosgw.gateway
+rgw socket path = /var/run/ceph/ceph.radosgw.gateway.fastcgi.sock
+log file = /var/log/ceph/client.radosgw.gateway.log
+rgw print continue = false
+rgw enable usage log = true
+rgw usage log tick interval = 30
+rgw usage log flush threshold = 1024
+rgw usage max shards = 32
+rgw usage max user shards = 1
+rgw frontends = "beast port=81"
+rgw keystone api version = 3
+rgw keystone url = http://192.168.122.11:5000
+rgw keystone accepted roles = admin
+rgw keystone token cache size = 10
+rgw keystone implicit tenants = false
+rgw keystone admin user = admin
+rgw keystone admin password = icc115
+rgw keystone admin domain = default
+rgw keystone admin project = admin
+rgw swift account in url = true
+rgw_keystone_admin_tenant = admin
+
+
+
+
